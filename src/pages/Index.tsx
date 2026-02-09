@@ -2,14 +2,16 @@ import { useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import SatelliteViewer from "@/components/SatelliteViewer";
+import VenueMap from "@/components/VenueMap";
 import VenueCard from "@/components/VenueCard";
 import EntranceDetail from "@/components/EntranceDetail";
 import { MOCK_VENUES, type EntranceMarker } from "@/data/venues";
-import { ScanLine, Target, Layers } from "lucide-react";
+import { ScanLine, Target, Layers, Map } from "lucide-react";
 
 const Index = () => {
   const [activeVenueId, setActiveVenueId] = useState(MOCK_VENUES[0].id);
   const [selectedEntrance, setSelectedEntrance] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"satellite" | "map">("map");
   const dashboardRef = useRef<HTMLDivElement>(null);
 
   const activeVenue = MOCK_VENUES.find((v) => v.id === activeVenueId)!;
@@ -92,12 +94,46 @@ const Index = () => {
               ))}
             </div>
 
-            {/* Satellite viewer */}
+            {/* Viewer area */}
             <div className="lg:col-span-6">
-              <SatelliteViewer
-                venue={activeVenue}
-                onEntranceSelect={handleEntranceSelect}
-              />
+              {/* View toggle */}
+              <div className="flex items-center gap-2 mb-3">
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`px-3 py-1.5 text-xs font-mono rounded border transition-colors flex items-center gap-1.5 ${
+                    viewMode === "map"
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-secondary text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                >
+                  <Map className="w-3 h-3" />
+                  Real Map
+                </button>
+                <button
+                  onClick={() => setViewMode("satellite")}
+                  className={`px-3 py-1.5 text-xs font-mono rounded border transition-colors flex items-center gap-1.5 ${
+                    viewMode === "satellite"
+                      ? "bg-primary/10 text-primary border-primary/30"
+                      : "bg-secondary text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                >
+                  <Target className="w-3 h-3" />
+                  AI Detection
+                </button>
+              </div>
+
+              {viewMode === "map" ? (
+                <VenueMap
+                  venue={activeVenue}
+                  selectedEntranceId={selectedEntrance}
+                  onEntranceSelect={handleEntranceSelect}
+                />
+              ) : (
+                <SatelliteViewer
+                  venue={activeVenue}
+                  onEntranceSelect={handleEntranceSelect}
+                />
+              )}
             </div>
 
             {/* Entrance details */}
