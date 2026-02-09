@@ -19,6 +19,37 @@ export interface EntranceMarker {
 
 export const MOCK_VENUES: VenueDetection[] = [
   {
+    id: "v4",
+    name: "Michigan Stadium",
+    type: "stadium",
+    confidence: 96.2,
+    coordinates: { lat: 42.2658, lng: -83.7486 },
+    status: "verified",
+    entrances: [
+      { id: "e13", label: "Gate 1 - Main St", x: 50, y: 8, type: "main", confidence: 97.5 },
+      { id: "e14", label: "Gate 2 - South", x: 50, y: 92, type: "main", confidence: 95.3 },
+      { id: "e15", label: "Gate 3 - East", x: 92, y: 50, type: "main", confidence: 94.1 },
+      { id: "e16", label: "Gate 4 - West", x: 8, y: 50, type: "main", confidence: 93.8 },
+      { id: "e17", label: "VIP Tunnel", x: 30, y: 88, type: "vip", confidence: 91.2 },
+      { id: "e18", label: "Press Entry", x: 70, y: 12, type: "service", confidence: 88.6 },
+    ],
+  },
+  {
+    id: "v5",
+    name: "Michigan Medicine",
+    type: "hospital",
+    confidence: 93.8,
+    coordinates: { lat: 42.2828, lng: -83.7285 },
+    status: "verified",
+    entrances: [
+      { id: "e19", label: "Main Entrance", x: 50, y: 88, type: "main", confidence: 96.9 },
+      { id: "e20", label: "Emergency Dept", x: 82, y: 55, type: "emergency", confidence: 98.1 },
+      { id: "e21", label: "Ambulance Bay", x: 75, y: 70, type: "emergency", confidence: 95.4 },
+      { id: "e22", label: "Service Dock", x: 18, y: 30, type: "service", confidence: 89.7 },
+      { id: "e23", label: "Staff Entry", x: 35, y: 15, type: "service", confidence: 87.3 },
+    ],
+  },
+  {
     id: "v1",
     name: "MetLife Stadium",
     type: "stadium",
