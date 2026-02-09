@@ -3,11 +3,18 @@ import type { VenueDetection, EntranceMarker } from "@/data/venues";
 import satelliteStadium from "@/assets/satellite-hero.jpg";
 import satelliteHospital from "@/assets/satellite-hospital.jpg";
 import satelliteAirport from "@/assets/satellite-airport.jpg";
+import satelliteMichiganStadium from "@/assets/satellite-michigan-stadium.jpg";
+import satelliteMichiganHospital from "@/assets/satellite-michigan-hospital.jpg";
 
 const imageMap: Record<string, string> = {
   stadium: satelliteStadium,
   hospital: satelliteHospital,
   airport: satelliteAirport,
+};
+
+const venueImageMap: Record<string, string> = {
+  v4: satelliteMichiganStadium,
+  v5: satelliteMichiganHospital,
 };
 
 const markerColors: Record<EntranceMarker["type"], string> = {
@@ -65,7 +72,7 @@ const SatelliteViewer = ({
       {/* Image container */}
       <div className="relative aspect-square max-h-[500px] overflow-hidden">
         <img
-          src={imageMap[venue.type]}
+          src={venueImageMap[venue.id] || imageMap[venue.type]}
           alt={`Satellite view of ${venue.name}`}
           className="w-full h-full object-cover"
         />
