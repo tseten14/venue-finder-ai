@@ -1,4 +1,4 @@
-import { Satellite, Github } from "lucide-react";
+import { Satellite } from "lucide-react";
 
 const Navbar = () => {
   return (
@@ -22,9 +22,6 @@ const Navbar = () => {
             <div className="w-2 h-2 rounded-full bg-geo-success animate-pulse" />
             <span className="text-xs text-muted-foreground">Online</span>
           </div>
-          <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-            <Github className="w-4 h-4" />
-          </a>
         </div>
       </div>
     </nav>
