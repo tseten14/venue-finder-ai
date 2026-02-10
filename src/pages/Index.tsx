@@ -9,12 +9,11 @@ import { MOCK_VENUES, type EntranceMarker } from "@/data/venues";
 import { ScanLine, Target, Layers, Map } from "lucide-react";
 
 const Index = () => {
-  const [activeVenueId, setActiveVenueId] = useState(MOCK_VENUES[0].id);
   const [selectedEntrance, setSelectedEntrance] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"satellite" | "map">("map");
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  const activeVenue = MOCK_VENUES.find((v) => v.id === activeVenueId)!;
+  const activeVenue = MOCK_VENUES[0];
 
   const scrollToDashboard = () => {
     dashboardRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,22 +75,16 @@ const Index = () => {
 
           {/* Main layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Venue list */}
+            {/* Venue info */}
             <div className="lg:col-span-3 space-y-3">
               <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-3">
-                Detected Venues
+                Active Venue
               </h3>
-              {MOCK_VENUES.map((venue) => (
-                <VenueCard
-                  key={venue.id}
-                  venue={venue}
-                  isActive={venue.id === activeVenueId}
-                  onClick={() => {
-                    setActiveVenueId(venue.id);
-                    setSelectedEntrance(null);
-                  }}
-                />
-              ))}
+              <VenueCard
+                venue={activeVenue}
+                isActive={true}
+                onClick={() => setSelectedEntrance(null)}
+              />
             </div>
 
             {/* Viewer area */}
