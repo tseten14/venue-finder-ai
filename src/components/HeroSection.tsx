@@ -1,7 +1,13 @@
 import { Satellite, MapPin, Shield, Activity } from "lucide-react";
 import heroImage from "@/assets/satellite-michigan-stadium.jpg";
 
-const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
+const HeroSection = ({
+  onStartAnalysis,
+  onViewDocs,
+}: {
+  onStartAnalysis: () => void;
+  onViewDocs: () => void;
+}) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background satellite image */}
@@ -38,8 +44,8 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          ML-powered satellite imagery analysis to detect and classify entrance
-          points of stadiums, hospitals, airports, and large-scale venues.
+          Satellite imagery analysis demo to visualize and classify entrance
+          points of stadiums, hospitals, airports, and large-scale venues. Mock data for now—ML will be implemented on top of this project.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
@@ -50,29 +56,15 @@ const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
             <Activity className="w-5 h-5" />
             Start Analysis
           </button>
-          <button className="px-8 py-4 border border-border text-foreground font-semibold rounded-lg hover:bg-secondary transition-all duration-300 flex items-center gap-2 justify-center">
+          <button
+            onClick={onViewDocs}
+            className="px-8 py-4 border border-border text-foreground font-semibold rounded-lg hover:bg-secondary transition-all duration-300 flex items-center gap-2 justify-center"
+          >
             <Shield className="w-5 h-5" />
             View Documentation
           </button>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-8 max-w-lg mx-auto animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-          {[
-            { label: "Venues Scanned", value: "12,847" },
-            { label: "Accuracy Rate", value: "94.7%" },
-            { label: "Entrances Found", value: "38,291" },
-          ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-2xl md:text-3xl font-bold font-mono text-primary">
-                {stat.value}
-              </div>
-              <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Corner decorations */}

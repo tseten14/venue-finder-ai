@@ -38,11 +38,7 @@ function createVenueIcon() {
     className: "",
     iconSize: [32, 32],
     iconAnchor: [16, 16],
-    html: `<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-      <rect x="2" y="2" width="28" height="28" rx="4" fill="none" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
-      <circle cx="16" cy="16" r="4" fill="#14b8a6" opacity="0.3"/>
-      <circle cx="16" cy="16" r="2" fill="#14b8a6"/>
-    </svg>`,
+    html: "",
   });
 }
 
