@@ -111,7 +111,7 @@ const Index = () => {
                   }`}
                 >
                   <Target className="w-3 h-3" />
-                  AI Detection
+                  Entrance Detection
                 </button>
               </div>
 

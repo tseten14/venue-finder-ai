@@ -89,37 +89,10 @@ const VenueMap = ({
     // Add zoom control top-right
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    // Venue center marker
+    // Venue center marker only (no individual entrance markers)
     L.marker([venue.coordinates.lat, venue.coordinates.lng], {
       icon: createVenueIcon(),
     }).addTo(map);
-
-    // Entrance markers
-    venue.entrances.forEach((entrance) => {
-      const isSelected = entrance.id === selectedEntranceId;
-      const marker = L.marker([entrance.lat, entrance.lng], {
-        icon: createEntranceIcon(entrance.type, isSelected),
-      }).addTo(map);
-
-      marker.bindPopup(
-        `<div style="font-family: 'JetBrains Mono', monospace; background: #141a21; color: #d4dce8; padding: 8px 12px; border-radius: 6px; border: 1px solid #1e2a35; min-width: 180px; margin: -14px -20px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 4px;">${entrance.label}</div>
-          <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:${markerColorMap[entrance.type]};"></span>
-            <span style="font-size: 10px; text-transform: uppercase; color: #6b7b8d;">${typeLabels[entrance.type]}</span>
-            <span style="font-size: 10px; color: #14b8a6;">${entrance.confidence}%</span>
-          </div>
-          <div style="font-size: 9px; color: #4a5568;">${entrance.lat.toFixed(5)}°N, ${Math.abs(entrance.lng).toFixed(5)}°W</div>
-        </div>`,
-        { className: "geo-popup", closeButton: false }
-      );
-
-      marker.on("click", () => onEntranceSelect(entrance));
-
-      if (isSelected) {
-        marker.openPopup();
-      }
-    });
 
     mapInstanceRef.current = map;
 
@@ -147,18 +120,7 @@ const VenueMap = ({
       {/* Map */}
       <div ref={mapRef} className="w-full" style={{ height: 500 }} />
 
-      {/* Legend */}
-      <div className="flex items-center gap-6 px-4 py-3 border-t border-border bg-secondary/30">
-        {Object.entries(typeLabels).map(([type, label]) => (
-          <div key={type} className="flex items-center gap-2">
-            <div
-              className="w-2.5 h-2.5 rounded-full"
-              style={{ backgroundColor: markerColorMap[type as EntranceMarker["type"]] }}
-            />
-            <span className="text-xs text-muted-foreground">{label}</span>
-          </div>
-        ))}
-      </div>
+      {/* Legend removed: real map now shows only the venue outline without entrance points */}
     </div>
   );
 };
