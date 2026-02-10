@@ -1,5 +1,5 @@
 import { Satellite, MapPin, Shield, Activity } from "lucide-react";
-import heroImage from "@/assets/satellite-hero.jpg";
+import heroImage from "@/assets/satellite-michigan-stadium.jpg";
 
 const HeroSection = ({ onStartAnalysis }: { onStartAnalysis: () => void }) => {
   return (
