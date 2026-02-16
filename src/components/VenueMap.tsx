@@ -109,24 +109,36 @@ const VenueMap = ({
       icon: createVenueIcon(),
     }).addTo(map);
 
+    const formatCoords = (lat: number, lng: number) =>
+      `${lat.toFixed(5)}°, ${lng.toFixed(5)}°`;
+
     // Venue entrance points (mock landmarks / gates)
     venue.entrances.forEach((entrance) => {
       const marker = L.marker([entrance.lat, entrance.lng], {
         icon: createEntranceIcon(entrance.type, selectedEntranceId === entrance.id),
       }).addTo(map);
       marker.on("click", () => onEntranceSelect(entrance));
-      marker.bindTooltip(entrance.label, { permanent: false });
+      marker.bindTooltip(
+        `<strong>${entrance.label}</strong><br/><span class="text-xs">${formatCoords(entrance.lat, entrance.lng)}</span>`,
+        { permanent: false, className: "venue-tooltip" }
+      );
     });
 
     // Transit entrances overlay (from GTFS search)
     transitEntrances.forEach((e) => {
       const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(TRANSIT_COLOR) }).addTo(map);
-      marker.bindTooltip(`${e.stationName} (${e.source})`, { permanent: false });
+      marker.bindTooltip(
+        `<strong>${e.stationName}</strong> (${e.source})<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
+        { permanent: false, className: "venue-tooltip" }
+      );
     });
     // CTA Chicago entrances (from data/entrances/cta.txt)
     ctaEntrances.forEach((e) => {
       const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(CTA_COLOR) }).addTo(map);
-      marker.bindTooltip(`${e.stationName} (CTA)`, { permanent: false });
+      marker.bindTooltip(
+        `<strong>${e.stationName}</strong> (CTA)<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
+        { permanent: false, className: "venue-tooltip" }
+      );
     });
 
     mapInstanceRef.current = map;
