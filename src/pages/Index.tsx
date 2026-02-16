@@ -49,7 +49,7 @@ const Index = () => {
             </h2>
             <p className="text-muted-foreground mt-2 max-w-xl">
               Select a venue to view satellite imagery and entrance points
-              with confidence scores. Mock data for now—ML will be implemented on this project.
+              with confidence scores. When the ML backend is running, detections can come directly from a model instead of mock data.
             </p>
           </div>
 
@@ -166,12 +166,12 @@ const Index = () => {
               entrances are and what type they are (main, emergency, service, VIP).
             </p>
             <p className="text-muted-foreground">
-              <strong className="text-foreground">ML will be implemented on top of this project.</strong> Right now
-              all entrance positions and confidence scores come from a mock dataset so the UI and
-              workflows can be built and tested. Once the foundation is in place, an ML pipeline
-              (e.g. YOLOv8 on satellite imagery) will be added for real image detection. The app
-              shows one venue at a time—you can switch between a real map view (satellite tiles +
-              venue location) and an “entrance detection” view where entrances are overlaid on imagery.
+              <strong className="text-foreground">ML backend available.</strong> By default the app uses a mock
+              dataset so the UI and workflows are predictable. When you start the Python backend,
+              the system can fetch live satellite tiles at the venue and run a detection model
+              to return entrances in the same data shape (venue + entrances with coordinates and types).
+              The app shows one venue at a time—you can switch between a real map view and an “entrance
+              detection” view where these entrances are overlaid.
             </p>
           </div>
 
@@ -213,7 +213,7 @@ const Index = () => {
             GeoAI Entrance Detection System © 2026
           </span>
           <span className="text-xs text-muted-foreground font-mono">
-            Mock data • ML will be implemented on this project
+            Mock data by default • ML backend optional (YOLOv8/TensorFlow)
           </span>
         </div>
       </footer>
