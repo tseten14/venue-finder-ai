@@ -44,7 +44,7 @@ const HeroSection = ({
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          Satellite imagery analysis with an optional ML backend to locate and classify entrances
+          Satellite imagery analysis to view and classify venue entrances
           for stadiums, hospitals, airports, and large-scale venues.
         </p>
 

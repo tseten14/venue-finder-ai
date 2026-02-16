@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { VenueDetection, EntranceMarker } from "@/data/venues";
+import type { TransitEntrance } from "@/lib/entrances-api";
 
 const markerColorMap: Record<EntranceMarker["type"], string> = {
   main: "#14b8a6",     // primary/teal
@@ -42,14 +43,32 @@ function createVenueIcon() {
   });
 }
 
+const TRANSIT_COLOR = "#3b82f6"; // blue for transit
+const CTA_COLOR = "#ea580c"; // orange for CTA Chicago
+
+function createTransitIcon(color: string) {
+  return L.divIcon({
+    className: "",
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+    html: `<svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="7" cy="7" r="5" fill="${color}" stroke="#0f1419" stroke-width="1.5"/>
+    </svg>`,
+  });
+}
+
 const VenueMap = ({
   venue,
   selectedEntranceId,
   onEntranceSelect,
+  transitEntrances = [],
+  ctaEntrances = [],
 }: {
   venue: VenueDetection;
   selectedEntranceId: string | null;
   onEntranceSelect: (entrance: EntranceMarker) => void;
+  transitEntrances?: TransitEntrance[];
+  ctaEntrances?: TransitEntrance[];
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -85,10 +104,30 @@ const VenueMap = ({
     // Add zoom control top-right
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    // Venue center marker only (no individual entrance markers)
+    // Venue center marker
     L.marker([venue.coordinates.lat, venue.coordinates.lng], {
       icon: createVenueIcon(),
     }).addTo(map);
+
+    // Venue entrance points (mock landmarks / gates)
+    venue.entrances.forEach((entrance) => {
+      const marker = L.marker([entrance.lat, entrance.lng], {
+        icon: createEntranceIcon(entrance.type, selectedEntranceId === entrance.id),
+      }).addTo(map);
+      marker.on("click", () => onEntranceSelect(entrance));
+      marker.bindTooltip(entrance.label, { permanent: false });
+    });
+
+    // Transit entrances overlay (from GTFS search)
+    transitEntrances.forEach((e) => {
+      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(TRANSIT_COLOR) }).addTo(map);
+      marker.bindTooltip(`${e.stationName} (${e.source})`, { permanent: false });
+    });
+    // CTA Chicago entrances (from data/entrances/cta.txt)
+    ctaEntrances.forEach((e) => {
+      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(CTA_COLOR) }).addTo(map);
+      marker.bindTooltip(`${e.stationName} (CTA)`, { permanent: false });
+    });
 
     mapInstanceRef.current = map;
 
@@ -96,7 +135,17 @@ const VenueMap = ({
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [venue, selectedEntranceId, onEntranceSelect]);
+  }, [venue, selectedEntranceId, onEntranceSelect, transitEntrances, ctaEntrances]);
+
+  // When user selects an entrance from the list, pan the map to its coordinates
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map || !selectedEntranceId) return;
+    const entrance = venue.entrances.find((e) => e.id === selectedEntranceId);
+    if (entrance) {
+      map.panTo([entrance.lat, entrance.lng], { animate: true, duration: 0.3 });
+    }
+  }, [selectedEntranceId, venue.entrances]);
 
   return (
     <div className="relative rounded-lg overflow-hidden border border-border bg-card">
@@ -116,7 +165,7 @@ const VenueMap = ({
       {/* Map */}
       <div ref={mapRef} className="w-full" style={{ height: 500 }} />
 
-      {/* Legend removed: real map now shows only the venue outline without entrance points */}
+      {/* Legend: teal = venue entrances, blue = transit search, orange = CTA */}
     </div>
   );
 };

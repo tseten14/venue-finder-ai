@@ -1,10 +1,11 @@
-import { Building2, Cross, Plane, MapPin, ChevronRight } from "lucide-react";
+import { Building2, Cross, Plane, MapPin, ChevronRight, Landmark } from "lucide-react";
 import type { VenueDetection } from "@/data/venues";
 
 const venueIcons = {
   stadium: Building2,
   hospital: Cross,
   airport: Plane,
+  district: Landmark,
 };
 
 const VenueCard = ({

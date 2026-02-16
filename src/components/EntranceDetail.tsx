@@ -18,16 +18,20 @@ const entranceStyles = {
 const EntranceDetail = ({
   entrance,
   isSelected,
+  onClick,
 }: {
   entrance: EntranceMarker;
   isSelected: boolean;
+  onClick?: () => void;
 }) => {
   const Icon = entranceIcons[entrance.type];
 
   return (
-    <div
-      className={`p-3 rounded-lg border transition-all duration-300 ${
-        isSelected ? entranceStyles[entrance.type] + " box-glow" : "border-border bg-card"
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full text-left p-3 rounded-lg border transition-all duration-300 cursor-pointer ${
+        isSelected ? entranceStyles[entrance.type] + " box-glow" : "border-border bg-card hover:border-primary/20"
       }`}
     >
       <div className="flex items-center justify-between">
@@ -49,7 +53,7 @@ const EntranceDetail = ({
           />
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

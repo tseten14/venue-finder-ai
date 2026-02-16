@@ -1,6 +1,6 @@
 # Venue Finder AI
 
-GeoAI Entrance Detection — a demo app to visualize venue entrances from satellite imagery, with an optional ML backend for automatic entrance detection.
+GeoAI Entrance Detection — a demo app to visualize venue entrances from satellite imagery and transit entrances (GTFS data).
 
 ## Run locally
 
