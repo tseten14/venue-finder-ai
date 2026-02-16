@@ -19,21 +19,24 @@ export interface EntranceMarker {
   confidence: number;
 }
 
+// Michigan Stadium: 6 public gates only. Positions on stadium concourse at gate openings (not on outer roads).
+const STADIUM_CENTER = { lat: 42.2658, lng: -83.7486 };
+
 export const MOCK_VENUES: VenueDetection[] = [
   {
     id: "v4",
     name: "Michigan Stadium",
     type: "stadium",
     confidence: 96.2,
-    coordinates: { lat: 42.2658, lng: -83.7486 },
+    coordinates: STADIUM_CENTER,
     status: "verified",
     entrances: [
-      { id: "e13", label: "Gate 1 - North (Main St)", x: 50, y: 8, lat: 42.2680, lng: -83.7486, type: "main", confidence: 97.5 },
-      { id: "e14", label: "Gate 2 - South (Stadium Blvd)", x: 50, y: 92, lat: 42.2636, lng: -83.7486, type: "main", confidence: 95.3 },
-      { id: "e15", label: "Gate 3 - East (State St)", x: 92, y: 50, lat: 42.2658, lng: -83.7458, type: "main", confidence: 94.1 },
-      { id: "e16", label: "Gate 4 - West (S Main St)", x: 8, y: 50, lat: 42.2658, lng: -83.7514, type: "main", confidence: 93.8 },
-      { id: "e17", label: "Players Tunnel (South)", x: 40, y: 85, lat: 42.2639, lng: -83.7493, type: "vip", confidence: 91.2 },
-      { id: "e18", label: "Press Box Entry (West)", x: 15, y: 40, lat: 42.2665, lng: -83.7510, type: "service", confidence: 88.6 },
+      { id: "e1", label: "Gate 1", x: 78, y: 32, lat: 42.26588, lng: -83.74755, type: "main", confidence: 97.5 },
+      { id: "e2", label: "Gate 2", x: 72, y: 82, lat: 42.26425, lng: -83.74795, type: "main", confidence: 96.8 },
+      { id: "e4", label: "Gate 4", x: 26, y: 80, lat: 42.26435, lng: -83.74972, type: "main", confidence: 96.2 },
+      { id: "e8", label: "Gate 8", x: 24, y: 34, lat: 42.26722, lng: -83.74972, type: "main", confidence: 95.9 },
+      { id: "e9", label: "Gate 9", x: 50, y: 16, lat: 42.26722, lng: -83.74872, type: "main", confidence: 95.5 },
+      { id: "e10", label: "Gate 10", x: 70, y: 22, lat: 42.26718, lng: -83.74795, type: "main", confidence: 95.1 },
     ],
   },
 ];
