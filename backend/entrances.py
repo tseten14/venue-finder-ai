@@ -19,7 +19,7 @@ def get_entrances(
     lat_max: float | None = None,
     lon_min: float | None = None,
     lon_max: float | None = None,
-    score_cutoff: int = 60,
+    score_cutoff: int = 45,
 ) -> list[dict]:
     """
     Return list of entrance records: { "stationName", "source", "lat", "lon" }.
@@ -84,9 +84,9 @@ def get_entrances(
             continue
         name_matches = process.extract(
             query.strip(),
-            filtered["stationName"].dropna().unique().tolist(),
+            filtered["stationName"].dropna().astype(str).str.strip().unique().tolist(),
             scorer=fuzz.token_sort_ratio,
-            limit=5,
+            limit=15,
             score_cutoff=score_cutoff,
         )
         if not name_matches:

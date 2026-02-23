@@ -40,7 +40,7 @@ export const MOCK_VENUES: VenueDetection[] = [
     dataFile: "cta.txt",
     sourceLabel: "CTA",
     markerColor: "#ea580c",
-    zoom: 12,
+    zoom: 11,
     entrances: [
       { id: "ch-1", label: "Millennium Park (Cloud Gate)", x: 50, y: 45, lat: 41.8827, lng: -87.6233, type: "main", confidence: 98.0 },
       { id: "ch-2", label: "Art Institute of Chicago", x: 55, y: 55, lat: 41.8796, lng: -87.6275, type: "main", confidence: 96.5 },
@@ -58,28 +58,14 @@ export const MOCK_VENUES: VenueDetection[] = [
     confidence: 93.5,
     coordinates: { lat: 37.7749, lng: -122.4194 },
     status: "verified",
-    dataFile: "bart.txt",
-    sourceLabel: "BART",
+    dataFile: "sfmta.txt",
+    sourceLabel: "SFMTA",
     markerColor: "#3b82f6",
     zoom: 10,
     entrances: [
       { id: "sf-1", label: "Embarcadero Station", x: 50, y: 50, lat: 37.7929, lng: -122.3970, type: "main", confidence: 97.0 },
       { id: "sf-2", label: "Powell Street Station", x: 48, y: 52, lat: 37.7844, lng: -122.4077, type: "main", confidence: 95.5 },
-    ],
-  },
-  {
-    id: "v-sfmta",
-    name: "SF Bay Area (SFMTA)",
-    type: "district",
-    confidence: 92.0,
-    coordinates: { lat: 37.7749, lng: -122.4194 },
-    status: "verified",
-    dataFile: "sfmta.txt",
-    sourceLabel: "SFMTA",
-    markerColor: "#8b5cf6",
-    zoom: 10,
-    entrances: [
-      { id: "sfmta-1", label: "Caltrain 4th & King", x: 50, y: 50, lat: 37.7765, lng: -122.3947, type: "main", confidence: 96.0 },
+      { id: "sf-3", label: "Caltrain 4th & King", x: 52, y: 54, lat: 37.7765, lng: -122.3947, type: "main", confidence: 96.0 },
     ],
   },
   {
@@ -112,22 +98,6 @@ export const MOCK_VENUES: VenueDetection[] = [
     entrances: [
       { id: "bos-1", label: "Park Street Station", x: 50, y: 50, lat: 42.3562, lng: -71.0624, type: "main", confidence: 96.5 },
       { id: "bos-2", label: "South Station", x: 52, y: 54, lat: 42.3519, lng: -71.0552, type: "main", confidence: 95.0 },
-    ],
-  },
-  {
-    id: "v-chicago-metra",
-    name: "Chicago (Metra)",
-    type: "district",
-    confidence: 91.5,
-    coordinates: { lat: 41.8826, lng: -87.6226 },
-    status: "verified",
-    dataFile: "metra.txt",
-    sourceLabel: "METRA",
-    markerColor: "#f59e0b",
-    zoom: 11,
-    entrances: [
-      { id: "met-1", label: "Union Station (Metra)", x: 50, y: 50, lat: 41.8782, lng: -87.6386, type: "main", confidence: 96.0 },
-      { id: "met-2", label: "Millennium Station", x: 52, y: 48, lat: 41.8841, lng: -87.6246, type: "main", confidence: 95.0 },
     ],
   },
   {
