@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { VenueDetection, EntranceMarker } from "@/data/venues";
-import type { TransitEntrance } from "@/lib/entrances-api";
+import type { TransitEntrance } from "@/lib/transit-data";
 
 const markerColorMap: Record<EntranceMarker["type"], string> = {
   main: "#14b8a6",     // primary/teal
@@ -43,9 +43,6 @@ function createVenueIcon() {
   });
 }
 
-const TRANSIT_COLOR = "#3b82f6"; // blue for transit
-const CTA_COLOR = "#ea580c"; // orange for CTA Chicago
-
 function createTransitIcon(color: string) {
   return L.divIcon({
     className: "",
@@ -62,13 +59,17 @@ const VenueMap = ({
   selectedEntranceId,
   onEntranceSelect,
   transitEntrances = [],
-  ctaEntrances = [],
+  cityEntrances = [],
+  cityColor = "#ea580c",
+  cityZoom = 12,
 }: {
   venue: VenueDetection;
   selectedEntranceId: string | null;
   onEntranceSelect: (entrance: EntranceMarker) => void;
   transitEntrances?: TransitEntrance[];
-  ctaEntrances?: TransitEntrance[];
+  cityEntrances?: TransitEntrance[];
+  cityColor?: string;
+  cityZoom?: number;
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -84,7 +85,7 @@ const VenueMap = ({
 
     const map = L.map(mapRef.current, {
       center: [venue.coordinates.lat, venue.coordinates.lng],
-      zoom: 17,
+      zoom: cityZoom,
       zoomControl: false,
       attributionControl: false,
     });
@@ -126,17 +127,18 @@ const VenueMap = ({
 
     // Transit entrances overlay (from GTFS search)
     transitEntrances.forEach((e) => {
-      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(TRANSIT_COLOR) }).addTo(map);
+      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon("#3b82f6") }).addTo(map);
       marker.bindTooltip(
         `<strong>${e.stationName}</strong> (${e.source})<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
         { permanent: false, className: "venue-tooltip" }
       );
     });
-    // CTA Chicago entrances (from data/entrances/cta.txt)
-    ctaEntrances.forEach((e) => {
-      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(CTA_COLOR) }).addTo(map);
+
+    // City-specific transit entrances (from data files)
+    cityEntrances.forEach((e) => {
+      const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(cityColor) }).addTo(map);
       marker.bindTooltip(
-        `<strong>${e.stationName}</strong> (CTA)<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
+        `<strong>${e.stationName}</strong> (${e.source})<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
         { permanent: false, className: "venue-tooltip" }
       );
     });
@@ -147,7 +149,7 @@ const VenueMap = ({
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [venue, selectedEntranceId, onEntranceSelect, transitEntrances, ctaEntrances]);
+  }, [venue, selectedEntranceId, onEntranceSelect, transitEntrances, cityEntrances, cityColor, cityZoom]);
 
   // When user selects an entrance from the list, pan the map to its coordinates
   useEffect(() => {
@@ -164,20 +166,21 @@ const VenueMap = ({
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-secondary/50">
         <div className="flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-geo-success animate-pulse" />
+          <div
+            className="w-2 h-2 rounded-full animate-pulse"
+            style={{ backgroundColor: cityColor }}
+          />
           <span className="font-mono text-sm text-foreground">
             MAP-VIEW // {venue.name.toUpperCase()}
           </span>
         </div>
         <span className="font-mono text-xs text-muted-foreground">
-          {venue.coordinates.lat.toFixed(4)}°N, {Math.abs(venue.coordinates.lng).toFixed(4)}°W
+          {venue.coordinates.lat.toFixed(4)}°, {venue.coordinates.lng.toFixed(4)}°
         </span>
       </div>
 
       {/* Map */}
       <div ref={mapRef} className="w-full" style={{ height: 500 }} />
-
-      {/* Legend: teal = venue entrances, blue = transit search, orange = CTA */}
     </div>
   );
 };
