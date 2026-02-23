@@ -62,6 +62,7 @@ const VenueMap = ({
   cityEntrances = [],
   cityColor = "#ea580c",
   cityZoom = 12,
+  extraLayers = [],
 }: {
   venue: VenueDetection;
   selectedEntranceId: string | null;
@@ -70,6 +71,7 @@ const VenueMap = ({
   cityEntrances?: TransitEntrance[];
   cityColor?: string;
   cityZoom?: number;
+  extraLayers?: { entrances: TransitEntrance[]; color: string; label: string }[];
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
@@ -143,13 +145,24 @@ const VenueMap = ({
       );
     });
 
+    // Extra transit layers (e.g. Metra on Chicago map)
+    extraLayers.forEach((layer) => {
+      layer.entrances.forEach((e) => {
+        const marker = L.marker([e.lat, e.lon], { icon: createTransitIcon(layer.color) }).addTo(map);
+        marker.bindTooltip(
+          `<strong>${e.stationName}</strong> (${layer.label})<br/><span class="text-xs">${formatCoords(e.lat, e.lon)}</span>`,
+          { permanent: false, className: "venue-tooltip" }
+        );
+      });
+    });
+
     mapInstanceRef.current = map;
 
     return () => {
       map.remove();
       mapInstanceRef.current = null;
     };
-  }, [venue, selectedEntranceId, onEntranceSelect, transitEntrances, cityEntrances, cityColor, cityZoom]);
+  }, [venue, selectedEntranceId, onEntranceSelect, transitEntrances, cityEntrances, cityColor, cityZoom, extraLayers]);
 
   // When user selects an entrance from the list, pan the map to its coordinates
   useEffect(() => {

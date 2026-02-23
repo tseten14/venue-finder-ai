@@ -14,6 +14,8 @@ export interface VenueDetection {
   markerColor?: string;
   /** Initial map zoom level */
   zoom?: number;
+  /** Additional transit data files to overlay on the same map */
+  extraDataFiles?: { file: string; label: string; color: string }[];
 }
 
 export interface EntranceMarker {
@@ -41,6 +43,9 @@ export const MOCK_VENUES: VenueDetection[] = [
     sourceLabel: "CTA",
     markerColor: "#ea580c",
     zoom: 11,
+    extraDataFiles: [
+      { file: "metra.txt", label: "Metra", color: "#a855f7" },
+    ],
     entrances: [
       { id: "ch-1", label: "Millennium Park (Cloud Gate)", x: 50, y: 45, lat: 41.8827, lng: -87.6233, type: "main", confidence: 98.0 },
       { id: "ch-2", label: "Art Institute of Chicago", x: 55, y: 55, lat: 41.8796, lng: -87.6275, type: "main", confidence: 96.5 },

@@ -12,6 +12,7 @@ const Index = () => {
   const [selectedVenueId, setSelectedVenueId] = useState<string>(MOCK_VENUES[0].id);
   const [selectedEntrance, setSelectedEntrance] = useState<string | null>(null);
   const [cityEntrances, setCityEntrances] = useState<TransitEntrance[]>([]);
+  const [extraLayers, setExtraLayers] = useState<{ entrances: TransitEntrance[]; color: string; label: string }[]>([]);
   const [cityLoading, setCityLoading] = useState(false);
   const [cityError, setCityError] = useState<string | null>(null);
   const dashboardRef = useRef<HTMLDivElement>(null);
@@ -24,6 +25,7 @@ const Index = () => {
     setSelectedVenueId(venueId);
     setSelectedEntrance(null);
     setCityEntrances([]);
+    setExtraLayers([]);
     setCityError(null);
   };
 
@@ -34,9 +36,23 @@ const Index = () => {
     try {
       const entrances = await loadTransitData(activeVenue.dataFile, activeVenue.sourceLabel);
       setCityEntrances(entrances);
+
+      // Load extra data files (e.g. Metra for Chicago)
+      if (activeVenue.extraDataFiles) {
+        const extras = await Promise.all(
+          activeVenue.extraDataFiles.map(async (extra) => {
+            const data = await loadTransitData(extra.file, extra.label);
+            return { entrances: data, color: extra.color, label: extra.label };
+          })
+        );
+        setExtraLayers(extras);
+      } else {
+        setExtraLayers([]);
+      }
     } catch (e) {
       setCityError(e instanceof Error ? e.message : "Failed to load data");
       setCityEntrances([]);
+      setExtraLayers([]);
     } finally {
       setCityLoading(false);
     }
@@ -86,11 +102,16 @@ const Index = () => {
 
           {/* Stats bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            {[
-              { icon: Target, label: "Cities", value: `${MOCK_VENUES.length}`, color: "text-primary" },
-              { icon: Layers, label: "Loaded Entrances", value: cityEntrances.length > 0 ? `${cityEntrances.length}` : "—", color: "text-geo-amber" },
-              { icon: MapPin, label: "Unique Stations", value: cityEntrances.length > 0 ? `${[...new Set(cityEntrances.map((e) => e.stationName))].length}` : "—", color: "text-geo-success" },
-            ].map((stat) => (
+            {(() => {
+              const allEntrances = [...cityEntrances, ...extraLayers.flatMap((l) => l.entrances)];
+              const totalLoaded = allEntrances.length;
+              const uniqueStations = [...new Set(allEntrances.map((e) => e.stationName))].length;
+              return [
+                { icon: Target, label: "Cities", value: `${MOCK_VENUES.length}`, color: "text-primary" },
+                { icon: Layers, label: "Loaded Entrances", value: totalLoaded > 0 ? `${totalLoaded}` : "—", color: "text-geo-amber" },
+                { icon: MapPin, label: "Unique Stations", value: totalLoaded > 0 ? `${uniqueStations}` : "—", color: "text-geo-success" },
+              ];
+            })().map((stat) => (
               <div
                 key={stat.label}
                 className="p-4 rounded-lg border border-border bg-card"
@@ -137,6 +158,7 @@ const Index = () => {
                 cityEntrances={cityEntrances}
                 cityColor={activeVenue.markerColor ?? "#ea580c"}
                 cityZoom={activeVenue.zoom ?? 12}
+                extraLayers={extraLayers}
               />
             </div>
 
@@ -223,15 +245,15 @@ const Index = () => {
           <div className="space-y-3">
             <h3 className="text-xl font-semibold text-foreground">Project Overview</h3>
             <p className="text-muted-foreground">
-              Venue Finder AI is a demo application for a GeoAI Entrance Detection System. The idea
-              is to use satellite imagery to view and classify
-              entrance points of large venues—stadiums, hospitals, airports—so users can see where
-              entrances are and what type they are (main, emergency, service, VIP).
+              Venue Finder AI is a GeoAI Entrance Detection System that uses satellite imagery to
+              visualize and classify entrance points across transit networks worldwide. Users can
+              explore station entrances, view their GPS coordinates, and see entrance types
+              (main, emergency, service, VIP) plotted on interactive satellite maps.
             </p>
             <p className="text-muted-foreground">
-              The app uses a mock
-              dataset so the UI and workflows are predictable. You can switch between a real map view and an "entrance
-              detection" view where these entrances are overlaid.
+              The application loads real GTFS-derived transit data from 10 agencies across 8 cities.
+              Switch between cities to explore each transit network, or use the search API to find
+              stations by name with fuzzy matching.
             </p>
           </div>
 
@@ -267,7 +289,7 @@ const Index = () => {
             GeoAI Entrance Detection System © 2026
           </span>
           <span className="text-xs text-muted-foreground font-mono">
-            Mock data • Satellite + map views
+            GTFS data • Satellite + map views
           </span>
         </div>
       </footer>
