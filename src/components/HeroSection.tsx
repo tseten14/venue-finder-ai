@@ -1,5 +1,4 @@
 import { Satellite, MapPin, Shield, Activity } from "lucide-react";
-import heroImage from "@/assets/satellite-michigan-stadium.jpg";
 
 const HeroSection = ({
   onStartAnalysis,
@@ -10,13 +9,9 @@ const HeroSection = ({
 }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background satellite image */}
+      {/* Background gradient */}
       <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Satellite imagery"
-          className="w-full h-full object-cover opacity-30"
-        />
+        <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-background to-background" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
         <div className="absolute inset-0 grid-overlay opacity-40" />
       </div>
