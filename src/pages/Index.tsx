@@ -105,11 +105,9 @@ const Index = () => {
             {(() => {
               const allEntrances = [...cityEntrances, ...extraLayers.flatMap((l) => l.entrances)];
               const totalLoaded = allEntrances.length;
-              const uniqueStations = [...new Set(allEntrances.map((e) => e.stationName))].length;
               return [
                 { icon: Target, label: "Cities", value: `${MOCK_VENUES.length}`, color: "text-primary" },
                 { icon: Layers, label: "Loaded Entrances", value: totalLoaded > 0 ? `${totalLoaded}` : "—", color: "text-geo-amber" },
-                { icon: MapPin, label: "Unique Stations", value: totalLoaded > 0 ? `${uniqueStations}` : "—", color: "text-geo-success" },
               ];
             })().map((stat) => (
               <div
